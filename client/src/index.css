@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slider {
+  -webkit-appearance: none;
+  height: 100%;
+  background: transparent;
+}
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  background-color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-image: url("/slider.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-layer{
+  background-image: url(/transparant_bg.jpg);
+}
