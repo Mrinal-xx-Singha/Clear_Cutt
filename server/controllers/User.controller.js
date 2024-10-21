@@ -39,17 +39,37 @@ const clerkWebHooks = async (req, res) => {
         lastName: data.last_name,
         photo: data.image_url,
       };
-      await userModel.findOneAndUpdate({clerkId:data.id},userData)
-      res.json({})
+      await userModel.findOneAndUpdate({ clerkId: data.id }, userData);
+      res.json({});
 
       break;
     }
     case "user.deleted": {
-        await userModel.findOneAndDelete({clerkId:data.id})
-        res.json({})
+      await userModel.findOneAndDelete({ clerkId: data.id });
+      res.json({});
       break;
     }
   }
 };
 
-export {clerkWebHooks} 
+// API Controller function to get available user credit data
+
+const userCredits = async (req, res) => {
+  try {
+    const { clerkId } = req.body;
+    const userData = await userModel.findOne({ clerkId });
+
+    if (!userData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.json({ success: true, credits: userData.creditBalance });
+  } catch (error) {
+    console.log("Error Occurred", error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { clerkWebHooks, userCredits };

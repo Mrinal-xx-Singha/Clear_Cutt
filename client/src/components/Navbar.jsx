@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const { openSignIn } = useClerk();
   const { isSignedIn, user } = useUser();
+
+  const { credit, loadCreditsData } = useContext(AppContext);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      loadCreditsData();
+    }
+  }, [isSignedIn]);
 
   return (
     <nav className="flex items-center justify-between mx-4 py-4 lg:mx-44">
@@ -18,7 +28,14 @@ const Navbar = () => {
       </Link>
 
       {isSignedIn ? (
-        <div>
+        <div className="flex justify-center items-center gap-2 lg:gap-3">
+          <button className="flex items-center gap-2 bg-yellow-300 px-4 sm:px-7 py-1.5 sm:py-2.5 rounded-full hover:scale-105 transition-all duration-700">
+            <img src="/icon/credit.svg" alt="credit" className="w-5 " />
+            <p className="text-gray-600 text-xs sm:text-sm font-medium ">
+              Credits :{credit}
+            </p>
+          </button>
+          <p className="text-gray-600 max-sm:hidden">Hi, {user.fullName}</p>
           <UserButton />
         </div>
       ) : (
