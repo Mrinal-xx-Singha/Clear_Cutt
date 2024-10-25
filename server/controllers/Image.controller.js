@@ -2,7 +2,6 @@ import axios from "axios";
 import fs from "fs";
 import FormData from "form-data";
 import userModel from "../modals/user.model.js";
-import { type } from "os";
 
 // Controller function to remove background from image
 
@@ -48,12 +47,17 @@ const removeBgImage = async (req, res) => {
 
     const resultImage = `data:${req.file.mimetype};base64,${base64Image}`;
 
-    // deducted one from the free credit 
+    // deducted one from the free credit
     await userModel.findByIdAndUpdate(user._id, {
       creditBalance: user.creditBalance - 1,
     });
 
-    res.json({success:true,resultImage,creditBalance: user.creditBalance - 1,message:"Background Removed ✔️" })
+    res.json({
+      success: true,
+      resultImage,
+      creditBalance: user.creditBalance - 1,
+      message: "Background Removed ✔️",
+    });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
