@@ -1,5 +1,8 @@
 import { Upload } from "lucide-react";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 const Header = () => {
+  const {removeBg} =useContext(AppContext)
   return (
     <div
       className="flex items-center justify-between max-sm:flex-col-reverse
@@ -23,7 +26,9 @@ const Header = () => {
           instantly for free!
         </p>
         <div>
-          <input type="file" name="" id="upload1" hidden />
+          <input
+          onChange={e=>removeBg(e.target.files[0])}
+          type="file" accept="image/*" id="upload1" hidden />
           <label
             htmlFor="upload1"
             className="inline-flex gap-3 px-8 py-3.5 rounded-full 

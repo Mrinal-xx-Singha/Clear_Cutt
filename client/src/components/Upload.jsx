@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Upload } from "lucide-react";
+import { AppContext } from "../context/AppContext";
 const UploadBtn = () => {
+
+  const {removeBg} =useContext(AppContext)
   return (
     <div className="pb-16">
       {/* title */}
@@ -12,7 +15,10 @@ const UploadBtn = () => {
         See The Magic, Try For Free
       </h1>
       <div className="text-center mb-24">
-        <input type="file" name="" id="upload2" hidden />
+        <input type="file" accept="image/*" id="upload2" hidden 
+        
+        onChange={e =>removeBg(e.target.files[0])}
+        />
         <label
           htmlFor="upload2"
           className="inline-flex gap-3 px-8 py-3.5 rounded-full 

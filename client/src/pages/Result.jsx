@@ -1,4 +1,8 @@
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
+
 const Result = () => {
+  const { resultImage, image } = useContext(AppContext);
   return (
     <div className="mx-4 my-3 lg:mx-44 mt-14">
       <div className="bg-white rounded-lg px-8 py-6 drop-shadow">
@@ -14,7 +18,7 @@ const Result = () => {
               Original
             </p>
             <img
-              src="/bg.png"
+              src={image ? URL.createObjectURL(image) : ""}
               alt="original bg"
               className="rounded-md border"
             />
@@ -26,26 +30,31 @@ const Result = () => {
               Background Removed
             </p>
             <div className="rounded-md border border-gray-300 h-full relative bg-layer overflow-hidden">
-              {/* <img src="/bg_removed.png" alt="bg-removed" /> */}
-              <div className="absolute right-1/2 bottom-1/2 transform translate-x-1/2 translate-y-1/2 ">
-                {/* Loader */}
-                <div className="border-4 border-blue-600 rounded-full h-12 w-12 border-t-transparent animate-spin"></div>
-              </div>
+              <img src={resultImage ? resultImage : ""} alt="bg-removed" />
+              {!resultImage && image && (
+                <div className="absolute right-1/2 bottom-1/2 transform translate-x-1/2 translate-y-1/2 ">
+                  {/* Loader */}
+                  <div className="border-4 border-blue-600 rounded-full h-12 w-12 border-t-transparent animate-spin"></div>
+                </div>
+              )}
             </div>
           </div>
         </div>
         {/* Two Buttons  */}
-        <div className="flex gap-4 justify-center sm:justify-end items-center flex-wrap mt-6">
-          <button className="px-8 py-2.5 text-blue-600 text-sm border border-blue-600 rounded-full hover:scale-105 transition-all duration-700">
-            Try Another Image
-          </button>
-          <a
-            href=""
-            className="px-8 py-2.5 text-white text-sm bg-gradient-to-r from-blue-800 to-blue-600 rounded-full  hover:scale-105 transition-all duration-700"
-          >
-            Download Image
-          </a>
-        </div>
+        {resultImage && (
+          <div className="flex gap-4 justify-center sm:justify-end items-center flex-wrap mt-6">
+            <button className="px-8 py-2.5 text-blue-600 text-sm border border-blue-600 rounded-full hover:scale-105 transition-all duration-700">
+              Try Another Image
+            </button>
+            <a
+              href={resultImage}
+              download
+              className="px-8 py-2.5 text-white text-sm bg-gradient-to-r from-blue-800 to-blue-600 rounded-full  hover:scale-105 transition-all duration-700"
+            >
+              Download Image
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
