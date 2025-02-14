@@ -1,5 +1,6 @@
 // API CONTROLLER FUNCTION TO MANAGE CLERK USER WITH DATABASE
 //HTTP://LOCALHOST:4000/API/USER/WEBHOOKS
+
 import { Webhook } from "svix";
 import userModel from "../modals/user.model.js";
 import razorpay from "razorpay";
@@ -138,7 +139,6 @@ const paymentRazorPay = async (req, res) => {
 
     // Razor pay order
     await razorPayInstance.orders.create(options, (error, order) => {
-
       if (error) {
         return res.json({ success: false, message: error });
       }
@@ -154,33 +154,33 @@ const paymentRazorPay = async (req, res) => {
 const verifyRazorPay = async (req, res) => {
   try {
     const { razorpay_order_id } = req.body;
-    const orderInfo = await razorPayInstance.orders.fetch(razorpay_order_id)
+    const orderInfo = await razorPayInstance.orders.fetch(razorpay_order_id);
 
-    if(orderInfo.status === "paid"){
-
+    if (orderInfo.status === "paid") {
       // Payment successfull
-      const transactionData = await transactionModel.findById(orderInfo.receipt)
+      const transactionData = await transactionModel.findById(
+        orderInfo.receipt
+      );
 
-
-      if(transactionData.payment){
-        return res.json({success:false,message:"Payment Failed"})
-
+      if (transactionData.payment) {
+        return res.json({ success: false, message: "Payment Failed" });
       }
 
       // Adding credits in user data
-      const userData = await userModel.findOne({clerkId:transactionData.clerkId})
+      const userData = await userModel.findOne({
+        clerkId: transactionData.clerkId,
+      });
       // Updated credit Balance
-      const creditBalance = userData.creditBalance + transactionData.credits
+      const creditBalance = userData.creditBalance + transactionData.credits;
 
       // By executing this statement credtis will be credited in the users account
-      await userModel.findByIdAndUpdate(userData._id,{creditBalance})
+      await userModel.findByIdAndUpdate(userData._id, { creditBalance });
 
       // Making the payment true
-      await transactionModel.findByIdAndUpdate(transactionData._id,{
-        payment:true
-      })
-      res.json({success:true,message:"Credits Added"})
-
+      await transactionModel.findByIdAndUpdate(transactionData._id, {
+        payment: true,
+      });
+      res.json({ success: true, message: "Credits Added" });
     }
   } catch (error) {
     console.log("Error Occurred", error.message);
@@ -188,4 +188,4 @@ const verifyRazorPay = async (req, res) => {
   }
 };
 
-export { clerkWebHooks, userCredits, paymentRazorPay,verifyRazorPay };
+export { clerkWebHooks, userCredits, paymentRazorPay, verifyRazorPay };
